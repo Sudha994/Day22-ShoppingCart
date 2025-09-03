@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+</head>
+<body>
+
+    <h2>Shopping Cart</h2>
+
+    <input type="text" id="itemName" placeholder="Enter item name">
+    <input type="number" id="itemPrice" placeholder="Enter price">
+    <button onclick="addItem()">Add To Cart</button>
+
+    <h3>Cart Items</h3>
+    <ul id="cartList"></ul>
+    <h3>Total : ₹<span id="totalPrice">0</span></h3>
+
+    <script>
+        let cart = [];
+
+        function addItem() {
+            let name = document.getElementById('itemName').value.trim();
+            let price = parseFloat(document.getElementById("itemPrice").value);
+
+            if(name && !isNaN(price) && price > 0){
+                cart.push({name: name, price: price});
+                document.getElementById("itemName").value = "";
+                document.getElementById("itemPrice").value = "";
+                displayCart();
+            }
+            else {
+                alert("Please enter valid item name and price");
+            }
+        }
+
+        function displayCart() {
+            let cartList = document.getElementById("cartList");
+            let totalPrice = document.getElementById("totalPrice");
+            
+            cartList.innerHTML = "";
+            
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                let li = document.createElement("li");
+                
+                let itemText = document.createTextNode(`${item.name} - ₹${item.price.toFixed(2)} `);
+                li.appendChild(itemText);
+                
+                let removeBtn = document.createElement("button");
+                removeBtn.textContent = "Remove";
+                removeBtn.onclick = () => removeItem(index);
+                li.appendChild(removeBtn);
+                
+                cartList.appendChild(li);
+            });
+            
+            totalPrice.textContent = total.toFixed(2);
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            displayCart();
+        }
+    </script>
+</body>
+</html>
